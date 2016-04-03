@@ -1,0 +1,22 @@
+## plotting the file - plot4.png - output scatterplot with lines
+
+file <- "household_power_consumption.txt"
+bigData <- read.table(file, header = TRUE, sep =";", nrow = 70000, stringsAsFactors = FALSE, dec = ".")
+subdata <- subset(bigData, Date == "1/2/2007" | Date == "2/2/2007")
+activePower <- as.numeric(subdata$Global_active_power)
+subMet1 <- as.numeric(subdata$Sub_metering_1)
+subMet2 <- as.numeric(subdata$Sub_metering_2)
+subMet3 <- as.numeric(subdata$Sub_metering_3)
+voltage <- as.numeric(subdata$Voltage)
+reactivePower <- as.numeric(subdata$Global_reactive_power)
+datetime <- strptime(paste(subdata$Date, subdata$Time, sep = " "), "%d/%m/%Y %H:%M:%S")
+png("plot4.png", width = 480, height = 480)
+par(mfrow = c(2, 2))
+plot(datetime, activePower, type = "l", xlab = "", ylab = "Global Active Power")
+plot(datetime, voltage, type = "l", xlab = "datetime", ylab = "Voltage")
+plot(datetime, subMet1, type = "l", xlab = "", ylab = "Energy sub metering")
+lines(datetime, subMet2, col = "red")
+lines(datetime, subMet3, col = "blue")
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty = 1, bty = "n", col = c("black", "red", "blue"))
+plot(datetime, reactivePower, type = "l", ylab = "Global_reactive_power", xlab = "datetime")
+dev.off()
